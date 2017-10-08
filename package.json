@@ -1,12 +1,13 @@
 {
   "name": "number-precision",
   "version": "1.0.0",
-  "description": "Accurate number",
+  "description": "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
   "author": "cam song",
   "keywords": [
-    "accurate number",
-    "number precision"
+    "number precision",
+    "floating problem",
+    "rounding error"
   ],
   "repository": {
     "type": "git",

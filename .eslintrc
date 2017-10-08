@@ -6,7 +6,6 @@
     "node": true
   },
   "rules": {
-    "valid-jsdoc": 2,
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "one-var": 0,

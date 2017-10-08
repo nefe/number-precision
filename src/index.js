@@ -12,46 +12,55 @@ function strip(num, precision = 12) {
 }
 
 /**
- * 精确除法
+ * Return digits length of a number
+ * @param {*number} num Input number
  */
-function add(num1, num2) {
-  const baseNum1 = (num1.toString().split('.')[1] || '').length;
-  const baseNum2 = (num2.toString().split('.')[1] || '').length;
-  const baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+function digitLength(num) {
+  return (num.toString().split('.')[1] || '').length;
+}
+
+/**
+ * 精确加法
+ */
+function plus(num1, num2) {
+  const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (num1 * baseNum + num2 * baseNum) / baseNum;
 }
 
 /**
- * 精确除法
+ * 精确减法
  */
-function sub(num1, num2) {
-  const baseNum1 = (num1.toString().split('.')[1] || '').length;
-  const baseNum2 = (num2.toString().split('.')[1] || '').length;
-  const baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-  const precision = (baseNum1 >= baseNum2) ? baseNum1 : baseNum2;
-  return ((num1 * baseNum - num2 * baseNum) / baseNum).toFixed(precision);
+function minus(num1, num2) {
+  const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
+  return (num1 * baseNum - num2 * baseNum) / baseNum;
 }
 
 /**
- * 精确除法
+ * 精确乘法
  */
-function multi(num1, num2) {
-  const baseNum1 = (num1.toString().split('.')[1] || '').length;
-  const baseNum2 = (num2.toString().split('.')[1] || '').length;
-  const baseNum = baseNum1 + baseNum2;
-  return Number(num1.toString().replace('.', '')) * Number(num2.toString().replace('.', '')) / Math.pow(10, baseNum);
+function times(num1, num2) {
+  const num1Changed = Number(num1.toString().replace('.', ''));
+  const num2Changed = Number(num2.toString().replace('.', ''));
+  const baseNum = digitLength(num1) + digitLength(num2);
+  return num1Changed * num2Changed / Math.pow(10, baseNum);
 }
 
 /**
  * 精确除法
  */
 function divide(num1, num2) {
-  const baseNum1 = (num1.toString().split('.')[1] || '').length;
-  const baseNum2 = (num2.toString().split('.')[1] || '').length;
-  const baseNum3 = Number(num1.toString().replace('.', ''));
-  const baseNum4 = Number(num2.toString().replace('.', ''));
-  return (baseNum3 / baseNum4) * Math.pow(10, baseNum2 - baseNum1);
+  const num1Changed = Number(num1.toString().replace('.', ''));
+  const num2Changed = Number(num2.toString().replace('.', ''));
+  return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
 }
 
-export { strip, add, sub, multi, divide };
-export default { strip, add, sub, multi, divide };
+/**
+ * 四舍五入
+ */
+function round(num, ratio) {
+  const base = Math.pow(10, ratio);
+  return divide(Math.round(times(num, base)), base);
+}
+
+export { strip, plus, minus, times, divide, round };
+export default { strip, plus, minus, times, divide, round };
