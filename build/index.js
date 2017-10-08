@@ -13,54 +13,66 @@ Object.defineProperty(exports, "__esModule", {
  * strip(0.09999999999999998)=0.1
  */
 function strip(num) {
-  return +parseFloat(num.toPrecision(12));
+  var precision = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 12;
+
+  return +parseFloat(num.toPrecision(precision));
 }
 
 /**
- * 精确除法
+ * Return digits length of a number
+ * @param {*number} num Input number
  */
-function add(num1, num2) {
-  var baseNum1 = (num1.toString().split('.')[1] || '').length;
-  var baseNum2 = (num2.toString().split('.')[1] || '').length;
-  var baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+function digitLength(num) {
+  return (num.toString().split('.')[1] || '').length;
+}
+
+/**
+ * 精确加法
+ */
+function plus(num1, num2) {
+  var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (num1 * baseNum + num2 * baseNum) / baseNum;
 }
 
 /**
- * 精确除法
+ * 精确减法
  */
-function sub(num1, num2) {
-  var baseNum1 = (num1.toString().split('.')[1] || '').length;
-  var baseNum2 = (num2.toString().split('.')[1] || '').length;
-  var baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-  var precision = baseNum1 >= baseNum2 ? baseNum1 : baseNum2;
-  return ((num1 * baseNum - num2 * baseNum) / baseNum).toFixed(precision);
+function minus(num1, num2) {
+  var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
+  return (num1 * baseNum - num2 * baseNum) / baseNum;
 }
 
 /**
- * 精确除法
+ * 精确乘法
  */
-function multi(num1, num2) {
-  var baseNum1 = (num1.toString().split('.')[1] || '').length;
-  var baseNum2 = (num2.toString().split('.')[1] || '').length;
-  var baseNum = baseNum1 + baseNum2;
-  return Number(num1.toString().replace('.', '')) * Number(num2.toString().replace('.', '')) / Math.pow(10, baseNum);
+function times(num1, num2) {
+  var num1Changed = Number(num1.toString().replace('.', ''));
+  var num2Changed = Number(num2.toString().replace('.', ''));
+  var baseNum = digitLength(num1) + digitLength(num2);
+  return num1Changed * num2Changed / Math.pow(10, baseNum);
 }
 
 /**
  * 精确除法
  */
 function divide(num1, num2) {
-  var baseNum1 = (num1.toString().split('.')[1] || '').length;
-  var baseNum2 = (num2.toString().split('.')[1] || '').length;
-  var baseNum3 = Number(num1.toString().replace('.', ''));
-  var baseNum4 = Number(num2.toString().replace('.', ''));
-  return baseNum3 / baseNum4 * Math.pow(10, baseNum2 - baseNum1);
+  var num1Changed = Number(num1.toString().replace('.', ''));
+  var num2Changed = Number(num2.toString().replace('.', ''));
+  return times(num1Changed / num2Changed, Math.pow(10, digitLength(num2) - digitLength(num1)));
+}
+
+/**
+ * 四舍五入
+ */
+function round(num, ratio) {
+  var base = Math.pow(10, ratio);
+  return divide(Math.round(times(num, base)), base);
 }
 
 exports.strip = strip;
-exports.add = add;
-exports.sub = sub;
-exports.multi = multi;
+exports.plus = plus;
+exports.minus = minus;
+exports.times = times;
 exports.divide = divide;
-exports.default = { strip: strip, add: add, sub: sub, multi: multi, divide: divide };
+exports.round = round;
+exports.default = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round };
