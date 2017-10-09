@@ -18,7 +18,8 @@ function strip(num, precision = 12) {
 function digitLength(num) {
   // Get digit length of e
   const eSplit = num.toString().split(/[eE]/);
-  return (eSplit[0].split('.')[1] || '').length - (+(eSplit[1] || 0));
+  const len = (eSplit[0].split('.')[1] || '').length - (+(eSplit[1] || 0));
+  return len > 0 ? len : 0;
 }
 
 /**
