@@ -23,7 +23,9 @@ function strip(num) {
  * @param {*number} num Input number
  */
 function digitLength(num) {
-  return (num.toString().split('.')[1] || '').length;
+  // Get digit length of e
+  var eSplit = num.toString().split(/[eE]/);
+  return (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0);
 }
 
 /**
@@ -75,4 +77,5 @@ exports.minus = minus;
 exports.times = times;
 exports.divide = divide;
 exports.round = round;
-exports.default = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round };
+exports.digitLength = digitLength;
+exports.default = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round, digitLength: digitLength };

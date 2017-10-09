@@ -12,6 +12,23 @@ describe('NP.strip', () => {
   });
 });
 
+
+describe('NP.digitLength', () => {
+  function T(num, result) {
+    assert.strictEqual(NP.digitLength(num), result);
+  }
+
+  it('can do digitLength operation', () => {
+    T(1.23e-5, 7);
+    T(1.233467e-5, 11);
+    T(123.45e-5, 7);
+    T(1.23e-10, 12);
+    T(1.23e1, 1);
+    T(123.4567890123, 10);
+  });
+});
+
+
 describe('NP.plus', () => {
   function T(num1, num2, result) {
     assert.strictEqual(NP.plus(num1, num2), result);
@@ -40,6 +57,7 @@ describe('NP.minus', () => {
     T(-1, 0, -1);
     T(-1, -0, -1);
     T(1, 22, -21);
+    T(1.3224e10, 21, 13223999979);
     T(8893568.397103781249, -7.29674059550, 8893575.693844376749);
     T(-0.00000000030532, 24.896880251, -24.89688025130532);
     T(105468873, 0, 105468873);

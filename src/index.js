@@ -16,7 +16,9 @@ function strip(num, precision = 12) {
  * @param {*number} num Input number
  */
 function digitLength(num) {
-  return (num.toString().split('.')[1] || '').length;
+  // Get digit length of e
+  const eSplit = num.toString().split(/[eE]/);
+  return (eSplit[0].split('.')[1] || '').length - (+(eSplit[1] || 0));
 }
 
 /**
@@ -62,5 +64,5 @@ function round(num, ratio) {
   return divide(Math.round(times(num, base)), base);
 }
 
-export { strip, plus, minus, times, divide, round };
-export default { strip, plus, minus, times, divide, round };
+export { strip, plus, minus, times, divide, round, digitLength };
+export default { strip, plus, minus, times, divide, round, digitLength };
