@@ -1,0 +1,8 @@
+dist: trusty
+language: node_js
+node_js:
+  - 8
+script:
+  - npm test
+addons:
+  chrome: stable

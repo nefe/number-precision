@@ -126,6 +126,9 @@ describe('NP.round', () => {
   }
 
   it('can do round operation', () => {
+    check(0, 1, 0);
+    check(0, 0, 0);
+    check(0.7875, 3, 0.788);
     check(0.105, 2, 0.11);
     check(1, 1, 1);
     check(0.1049999999, 2, 0.1);
