@@ -30,11 +30,21 @@ function digitLength(num) {
 }
 
 /**
+ * 精确乘法
+ */
+function times(num1, num2) {
+  var num1Changed = Number(num1.toString().replace('.', ''));
+  var num2Changed = Number(num2.toString().replace('.', ''));
+  var baseNum = digitLength(num1) + digitLength(num2);
+  return num1Changed * num2Changed / Math.pow(10, baseNum);
+}
+
+/**
  * 精确加法
  */
 function plus(num1, num2) {
   var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-  return (num1 * baseNum + num2 * baseNum) / baseNum;
+  return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
 
 /**
@@ -43,16 +53,6 @@ function plus(num1, num2) {
 function minus(num1, num2) {
   var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (num1 * baseNum - num2 * baseNum) / baseNum;
-}
-
-/**
- * 精确乘法
- */
-function times(num1, num2) {
-  var num1Changed = Number(num1.toString().replace('.', ''));
-  var num2Changed = Number(num2.toString().replace('.', ''));
-  var baseNum = digitLength(num1) + digitLength(num2);
-  return num1Changed * num2Changed / Math.pow(10, baseNum);
 }
 
 /**
