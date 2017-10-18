@@ -32,7 +32,6 @@ function times(num1, num2) {
   return num1Changed * num2Changed / Math.pow(10, baseNum);
 }
 
-
 /**
  * 精确加法
  */
@@ -46,7 +45,7 @@ function plus(num1, num2) {
  */
 function minus(num1, num2) {
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-  return (num1 * baseNum - num2 * baseNum) / baseNum;
+  return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
 }
 
 /**

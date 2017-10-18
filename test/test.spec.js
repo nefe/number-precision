@@ -55,6 +55,8 @@ describe('NP.minus', () => {
   }
 
   it('can do minus operation', () => {
+    check(0.07, 0.01, 0.06);
+    check(0.7, 0.1, 0.6);
     check(1.0, 0.9, 0.1);
     check(1, 0, 1);
     check(1, -0, 1);
@@ -78,6 +80,8 @@ describe('NP.times', () => {
   }
 
   it('can do times operation', () => {
+    check(0.07, 100, 7);
+    check(0.7, 0.1, 0.07);
     check(3, 0.3, 0.9);
     check(0.362, 100, 36.2);
     check(1.1, 1.1, 1.21);
