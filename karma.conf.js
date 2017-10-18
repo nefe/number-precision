@@ -29,11 +29,19 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['coverage', 'coveralls'],
+    reporters: ['progress', 'coverage', 'coveralls'],
 
     coverageReporter: {
-      type: 'lcov', // lcov or lcovonly are required for generating lcov.info files
-      dir: 'coverage/'
+      dir: 'test',
+      reporters: [{
+        type: 'html',
+        subdir: 'coverage'
+      }, {
+        type: 'text',
+      }, {
+        type: 'lcov',
+        subdir: 'coverage'
+      }]
     },
 
     webpackMiddleware: {
@@ -75,7 +83,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless'],
+    browsers: ['Firefox'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
@@ -86,5 +94,5 @@ module.exports = function(config) {
     // concurrency: Infinity,
 
     // plugins: ['karma-phantomjs-launcher', 'karma-sourcemap-loader', 'karma-webpack']
-  })
-}
+  });
+};
