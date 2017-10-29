@@ -28,6 +28,25 @@ describe('NP.digitLength', () => {
     check(1.23e1, 1);
     check(1e20, 0);
     check(1.12345e20, 0);
+    check(1.123e30, 0);
+    check(1.123e-100, 103);
+  });
+});
+
+describe('NP.float2Fixed', () => {
+  function check(num, result) {
+    assert.strictEqual(NP.float2Fixed(num), result);
+  }
+
+  it('can change float to fixed', () => {
+    check(1e-1, 1);
+    check(1e-6, 1);
+    check(1e-7, 1);
+    check(1e-13, 1);
+    check(1.123e30, 1.123e30);
+    check(1.6e-30, 16);
+    check(1.234567e-13, 1234567);
+    check(1.2345678912345e10, 12345678912345);
   });
 });
 
@@ -46,6 +65,7 @@ describe('NP.plus', () => {
     check(-1, 0, -1);
     check(2.018, 0.001, 2.019);
     check(1.3224e10, 1.3224e3, 13224001322.4);
+    check(1.6e-30, 1.6e-30, 3.2e-30);
   });
 });
 
@@ -70,6 +90,7 @@ describe('NP.minus', () => {
     check(1.23e-5, 1.0023, -1.0022877);
     check(1.3224e10, 21, 13223999979);
     check(1.3224e10, 1.3224e3, 13223998677.6);
+    check(1.7e-30, 0.1e-30, 1.6e-30);
   });
 });
 
@@ -82,6 +103,7 @@ describe('NP.times', () => {
     check(0.07, 100, 7);
     check(0.7, 0.1, 0.07);
     check(3, 0.3, 0.9);
+    check(118762317358.75, 1e-8, 1187.6231735875);
     check(0.362, 100, 36.2);
     check(1.1, 1.1, 1.21);
     check(2.018, 1000, 2018);
@@ -97,6 +119,7 @@ describe('NP.times', () => {
     check(-1.1, -7.272727272727273, 8);
 
     check(-1.23e4, 20, -246000);
+    check(1.7e-30, 1.5e20, 2.55e-10);
   });
 });
 
@@ -107,6 +130,7 @@ describe('NP.divide', () => {
 
   it('can do divide operation', () => {
     check(1.21, 1.1, 1.1);
+    check(4750.49269435, 4, 1187.6231735875);
     check(0.9, 3, 0.3);
     check(36.2, 0.362, 100);
     check(-20, 5.2, -3.8461538461538462);
@@ -121,6 +145,7 @@ describe('NP.divide', () => {
     check(8, -1.1, -7.272727272727273);
 
     check(-1.23e4, 20, -615);
+    check(2.55e-10, 1.7e-30, 1.5e20);
   });
 });
 

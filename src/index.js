@@ -23,11 +23,23 @@ function digitLength(num) {
 }
 
 /**
+ * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
+ * @param {*number} num 输入数
+ */
+function float2Fixed(num) {
+  if (num.toString().indexOf('e') === -1) {
+    return Number(num.toString().replace('.', ''));
+  }
+  const dLen = digitLength(num);
+  return dLen > 0 ? num * Math.pow(10, dLen) : num;
+}
+
+/**
  * 精确乘法
  */
 function times(num1, num2) {
-  const num1Changed = Number(num1.toString().replace('.', ''));
-  const num2Changed = Number(num2.toString().replace('.', ''));
+  const num1Changed = float2Fixed(num1);
+  const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
   return num1Changed * num2Changed / Math.pow(10, baseNum);
 }
@@ -52,8 +64,8 @@ function minus(num1, num2) {
  * 精确除法
  */
 function divide(num1, num2) {
-  const num1Changed = Number(num1.toString().replace('.', ''));
-  const num2Changed = Number(num2.toString().replace('.', ''));
+  const num1Changed = float2Fixed(num1);
+  const num2Changed = float2Fixed(num2);
   return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
 }
 
@@ -65,5 +77,5 @@ function round(num, ratio) {
   return divide(Math.round(times(num, base)), base);
 }
 
-export { strip, plus, minus, times, divide, round, digitLength };
-export default { strip, plus, minus, times, divide, round, digitLength };
+export { strip, plus, minus, times, divide, round, digitLength, float2Fixed };
+export default { strip, plus, minus, times, divide, round, digitLength, float2Fixed };
