@@ -1,6 +1,6 @@
 {
   "name": "number-precision",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description":
     "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
