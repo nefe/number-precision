@@ -41,7 +41,13 @@ function times(num1, num2) {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
-  return num1Changed * num2Changed / Math.pow(10, baseNum);
+  const leftValue = num1Changed * num2Changed;
+
+  if (leftValue > Number.MAX_SAFE_INTEGER || leftValue < Number.MIN_SAFE_INTEGER) {
+    console.warn(`${leftValue} is beyond boundary when transfer to integer, the results may not be accurate`);
+  }
+
+  return leftValue / Math.pow(10, baseNum);
 }
 
 /**
