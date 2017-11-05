@@ -35,6 +35,16 @@ function float2Fixed(num) {
 }
 
 /**
+ * 检测数字是否越界，如果越界给出提示
+ * @param {*number} num 输入数
+ */
+function checkBoundary(num) {
+  if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
+    console.warn(`${num} is beyond boundary when transfer to integer, the results may not be accurate`);
+  }
+}
+
+/**
  * 精确乘法
  */
 function times(num1, num2) {
@@ -43,9 +53,7 @@ function times(num1, num2) {
   const baseNum = digitLength(num1) + digitLength(num2);
   const leftValue = num1Changed * num2Changed;
 
-  if (leftValue > Number.MAX_SAFE_INTEGER || leftValue < Number.MIN_SAFE_INTEGER) {
-    console.warn(`${leftValue} is beyond boundary when transfer to integer, the results may not be accurate`);
-  }
+  checkBoundary(leftValue);
 
   return leftValue / Math.pow(10, baseNum);
 }
@@ -72,6 +80,8 @@ function minus(num1, num2) {
 function divide(num1, num2) {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
+  checkBoundary(num1Changed);
+  checkBoundary(num2Changed);
   return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
 }
 
