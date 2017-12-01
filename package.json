@@ -1,12 +1,15 @@
 {
   "name": "number-precision",
   "version": "1.1.7",
-  "description":
-    "Perform addition, subtraction, multiplication and division operations precisely using javascript",
+  "description": "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
   "typings": "./index.d.ts",
   "author": "cam song",
-  "keywords": ["number precision", "floating problem", "rounding error"],
+  "keywords": [
+    "number precision",
+    "floating problem",
+    "rounding error"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dt-fe/number-precision.git"
@@ -18,10 +21,8 @@
   "scripts": {
     "test": "karma start --single-run",
     "tdd": "karma start --auto-watch --no-single-run",
-    "test-cov":
-      "karma start --auto-watch --single-run --reporters progress,coverage",
-    "build":
-      "babel src --out-dir build && minify src/index.js --out-file build/index.min.js",
+    "test-cov": "karma start --auto-watch --single-run --reporters progress,coverage",
+    "build": "babel src --out-dir build && minify src/index.js --out-file build/index.min.js",
     "clean": "rm -rf build",
     "lint": "eslint src test"
   },

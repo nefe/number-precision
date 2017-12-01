@@ -51,8 +51,9 @@ describe('NP.float2Fixed', () => {
 });
 
 describe('NP.plus', () => {
-  function check(num1, num2, result) {
-    assert.strictEqual(NP.plus(num1, num2), result);
+  function check() {
+    var result = [].pop.call(arguments);
+    assert.strictEqual(NP.plus.apply(null, arguments), result);
   }
 
   it('can do plus operation', () => {
@@ -66,12 +67,15 @@ describe('NP.plus', () => {
     check(2.018, 0.001, 2.019);
     check(1.3224e10, 1.3224e3, 13224001322.4);
     check(1.6e-30, 1.6e-30, 3.2e-30);
+
+    check(1, 2, 3, 6);
   });
 });
 
 describe('NP.minus', () => {
-  function check(num1, num2, result) {
-    assert.strictEqual(NP.minus(num1, num2), result);
+  function check() {
+    var result = [].pop.call(arguments);
+    assert.strictEqual(NP.minus.apply(null, arguments), result);
   }
 
   it('can do minus operation', () => {
@@ -91,12 +95,15 @@ describe('NP.minus', () => {
     check(1.3224e10, 21, 13223999979);
     check(1.3224e10, 1.3224e3, 13223998677.6);
     check(1.7e-30, 0.1e-30, 1.6e-30);
+
+    check(6, 3, 2, 1);
   });
 });
 
 describe('NP.times', () => {
   function check(num1, num2, result) {
-    assert.strictEqual(NP.times(num1, num2), result);
+    var result = [].pop.call(arguments);
+    assert.strictEqual(NP.times.apply(null, arguments), result);
   }
 
   it('can do times operation', () => {
@@ -120,12 +127,15 @@ describe('NP.times', () => {
 
     check(-1.23e4, 20, -246000);
     check(1.7e-30, 1.5e20, 2.55e-10);
+
+    check(2, 2, 3, 12);
   });
 });
 
 describe('NP.divide', () => {
   function check(num1, num2, result) {
-    assert.strictEqual(NP.divide(num1, num2), result);
+    var result = [].pop.call(arguments);
+    assert.strictEqual(NP.divide.apply(null, arguments), result);
   }
 
   it('can do divide operation', () => {
@@ -146,6 +156,8 @@ describe('NP.divide', () => {
 
     check(-1.23e4, 20, -615);
     check(2.55e-10, 1.7e-30, 1.5e20);
+
+    check(12, 3, 2, 2);
   });
 });
 
