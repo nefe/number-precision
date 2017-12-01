@@ -68,7 +68,9 @@ describe('NP.plus', () => {
     check(1.3224e10, 1.3224e3, 13224001322.4);
     check(1.6e-30, 1.6e-30, 3.2e-30);
 
-    check(1, 2, 3, 6);
+    check(1, 1);
+    check(0.1, 0.2, 0.3, 0.6);
+    check();
   });
 });
 
@@ -97,6 +99,8 @@ describe('NP.minus', () => {
     check(1.7e-30, 0.1e-30, 1.6e-30);
 
     check(6, 3, 2, 1);
+    check(2, 2);
+    check();
   });
 });
 
@@ -129,6 +133,8 @@ describe('NP.times', () => {
     check(1.7e-30, 1.5e20, 2.55e-10);
 
     check(2, 2, 3, 12);
+    check(3, 3);
+    check();
   });
 });
 
@@ -158,6 +164,8 @@ describe('NP.divide', () => {
     check(2.55e-10, 1.7e-30, 1.5e20);
 
     check(12, 3, 2, 2);
+    check(4, 4);
+    check();
   });
 });
 
