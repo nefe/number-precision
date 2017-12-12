@@ -47,7 +47,10 @@ function checkBoundary(num) {
 /**
  * 精确乘法
  */
-function times(num1, num2) {
+function times(num1, num2, ...others) {
+  if (others.length > 0) {
+    return times(times(num1, num2), ...others);
+  }
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
@@ -61,7 +64,10 @@ function times(num1, num2) {
 /**
  * 精确加法
  */
-function plus(num1, num2) {
+function plus(num1, num2, ...others) {
+  if (others.length > 0) {
+    return plus(plus(num1, num2), ...others);
+  }
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
@@ -69,7 +75,10 @@ function plus(num1, num2) {
 /**
  * 精确减法
  */
-function minus(num1, num2) {
+function minus(num1, num2, ...others) {
+  if (others.length > 0) {
+    return minus(minus(num1, num2), ...others);
+  }
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
 }
@@ -77,7 +86,10 @@ function minus(num1, num2) {
 /**
  * 精确除法
  */
-function divide(num1, num2) {
+function divide(num1, num2, ...others) {
+  if (others.length > 0) {
+    return divide(divide(num1, num2), ...others);
+  }
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   checkBoundary(num1Changed);
