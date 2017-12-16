@@ -1,6 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.NP = {})));
+}(this, (function (exports) { 'use strict';
 
 /**
  * @file 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
@@ -125,3 +127,7 @@ exports.round = round;
 exports.digitLength = digitLength;
 exports.float2Fixed = float2Fixed;
 exports['default'] = index;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));

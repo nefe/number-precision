@@ -1,6 +1,5 @@
+var NP = (function (exports) {
 'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
 
 /**
  * @file 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
@@ -125,3 +124,7 @@ exports.round = round;
 exports.digitLength = digitLength;
 exports.float2Fixed = float2Fixed;
 exports['default'] = index;
+
+return exports;
+
+}({}));

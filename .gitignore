@@ -4,3 +4,5 @@ node_modules
 lib
 coverage
 logs
+build-test
+.rpt2_cache
