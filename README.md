@@ -1,4 +1,4 @@
-# number-precision [![npm version](https://badge.fury.io/js/number-precision.svg)](http://badge.fury.io/js/number-precision) [![Build Status](https://travis-ci.org/nefe/number-precision.svg)](https://travis-ci.org/nefe/number-precision) [![Coverage Status](https://coveralls.io/repos/github/nefe/number-precision/badge.svg?branch=master)](https://coveralls.io/github/nefe/number-precision?branch=master)
+# number-precision [![npm version](https://badge.fury.io/js/number-precision.svg)](http://badge.fury.io/js/number-precision) [![Build Status](https://travis-ci.org/nefe/number-precision.svg)](https://travis-ci.org/nefe/number-precision) [![codecov](https://codecov.io/gh/nefe/number-precision/branch/master/graph/badge.svg)](https://codecov.io/gh/nefe/number-precision)
 
 Perform addition, subtraction, multiplication and division operations precisely using javascript
 
@@ -20,10 +20,10 @@ npm install number-precision --save
 
 ```js
 NP.strip(num)         // strip a number to nearest right number
-NP.plus(num1, num2)   // addition, num + num2
-NP.minus(num1, num2)  // subtraction, num1 - num2
-NP.times(num1, num2)  // multiplication, num1 * num2
-NP.divide(num1, num2) // division, num1 / num2
+NP.plus(num1, num2, num3, ...)   // addition, num + num2 + num3, two numbers is required at least.
+NP.minus(num1, num2, num3, ...)  // subtraction, num1 - num2 - num3
+NP.times(num1, num2, num3, ...)  // multiplication, num1 * num2 * num3
+NP.divide(num1, num2, num3, ...) // division, num1 / num2 / num3
 NP.round(num, ratio)  // round a number based on ratio
 ```
 
