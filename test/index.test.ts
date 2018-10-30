@@ -30,6 +30,8 @@ test('NP.float2Fixed can change float to fixed', (t) => {
   t.true(NP.float2Fixed(1.6e-30) === 16);
   t.true(NP.float2Fixed(1.234567e-13) === 1234567);
   t.true(NP.float2Fixed(1.2345678912345e10) === 12345678912345);
+  t.true(NP.float2Fixed(0.000000123456) === 123456);
+  t.true(NP.float2Fixed(1.23456e-7) === 123456);
 });
 
 test('NP.plus can do plus operation', (t) => {
@@ -93,6 +95,9 @@ test('NP.times can do times operation', (t) => {
 
   t.true(NP.times(2, 2, 3) === 12);
   t.true(NP.times(2, 2, 3, 0.1) === 1.2);
+
+  t.true(NP.times(0.000000123456, 0.000000123456) === 1.5241383936e-14);
+  t.true(NP.times(1.23456e-7, 1.23456e-7) === 1.5241383936e-14);
 });
 
 test('NP.divide can do divide operation', (t) => {
