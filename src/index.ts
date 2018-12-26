@@ -31,7 +31,7 @@ function float2Fixed(num: number): number {
     return Number(num.toString().replace('.', ''));
   }
   const dLen = digitLength(num);
-  return dLen > 0 ? num * Math.pow(10, dLen) : num;
+  return dLen > 0 ? strip(num * Math.pow(10, dLen)) : num;
 }
 
 /**
