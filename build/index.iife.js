@@ -32,7 +32,7 @@ function float2Fixed(num) {
         return Number(num.toString().replace('.', ''));
     }
     var dLen = digitLength(num);
-    return dLen > 0 ? num * Math.pow(10, dLen) : num;
+    return dLen > 0 ? strip(num * Math.pow(10, dLen)) : num;
 }
 /**
  * 检测数字是否越界，如果越界给出提示

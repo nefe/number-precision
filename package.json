@@ -1,6 +1,6 @@
 {
   "name": "number-precision",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
   "types": "src/index.ts",
@@ -36,7 +36,7 @@
   ],
   "devDependencies": {
     "ava": "^0.24.0",
-    "codecov": "^3.0.0",
+    "codecov": "^3.1.0",
     "nyc": "^11.3.0",
     "pre-commit": "^1.2.2",
     "rollup": "^0.52.2",
