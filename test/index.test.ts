@@ -1,4 +1,4 @@
-import test from "ava"
+import test from 'ava';
 import NP from '../src/index';
 
 test('NP.strip can eliminate rounding errors', (t) => {

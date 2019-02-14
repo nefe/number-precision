@@ -1,5 +1,5 @@
 /**
- * @file 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
+ * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
  */
 
@@ -39,8 +39,10 @@ function float2Fixed(num: number): number {
  * @param {*number} num 输入数
  */
 function checkBoundary(num: number) {
-  if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
-    console.warn(`${num} is beyond boundary when transfer to integer, the results may not be accurate`);
+  if (_boundaryCheckingState) {
+    if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
+      console.warn(`${num} is beyond boundary when transfer to integer, the results may not be accurate`);
+    }
   }
 }
 
@@ -105,5 +107,13 @@ function round(num: number, ratio: number): number {
   return divide(Math.round(times(num, base)), base);
 }
 
-export { strip, plus, minus, times, divide, round, digitLength, float2Fixed };
-export default { strip, plus, minus, times, divide, round, digitLength, float2Fixed };
+let _boundaryCheckingState = false;
+/**
+ * 是否进行边界检查，默认开启
+ * @param flag 标记开关，true 为开启，false 为关闭，默认为 true
+ */
+function enableBoundaryChecking(flag = true) {
+  _boundaryCheckingState = flag;
+}
+export { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
+export default { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
