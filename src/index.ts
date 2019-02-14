@@ -107,7 +107,7 @@ function round(num: number, ratio: number): number {
   return divide(Math.round(times(num, base)), base);
 }
 
-let _boundaryCheckingState = false;
+let _boundaryCheckingState = true;
 /**
  * 是否进行边界检查，默认开启
  * @param flag 标记开关，true 为开启，false 为关闭，默认为 true

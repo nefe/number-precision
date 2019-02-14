@@ -2,7 +2,7 @@ var NP = (function (exports) {
 'use strict';
 
 /**
- * @file 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
+ * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
  */
 /**
@@ -39,8 +39,10 @@ function float2Fixed(num) {
  * @param {*number} num 输入数
  */
 function checkBoundary(num) {
-    if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
-        console.warn(num + " is beyond boundary when transfer to integer, the results may not be accurate");
+    if (_boundaryCheckingState) {
+        if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
+            console.warn(num + " is beyond boundary when transfer to integer, the results may not be accurate");
+        }
     }
 }
 /**
@@ -113,7 +115,16 @@ function round(num, ratio) {
     var base = Math.pow(10, ratio);
     return divide(Math.round(times(num, base)), base);
 }
-var index = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round, digitLength: digitLength, float2Fixed: float2Fixed };
+var _boundaryCheckingState = true;
+/**
+ * 是否进行边界检查，默认开启
+ * @param flag 标记开关，true 为开启，false 为关闭，默认为 true
+ */
+function enableBoundaryChecking(flag) {
+    if (flag === void 0) { flag = true; }
+    _boundaryCheckingState = flag;
+}
+var index = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round, digitLength: digitLength, float2Fixed: float2Fixed, enableBoundaryChecking: enableBoundaryChecking };
 
 exports.strip = strip;
 exports.plus = plus;
@@ -123,6 +134,7 @@ exports.divide = divide;
 exports.round = round;
 exports.digitLength = digitLength;
 exports.float2Fixed = float2Fixed;
+exports.enableBoundaryChecking = enableBoundaryChecking;
 exports['default'] = index;
 
 return exports;

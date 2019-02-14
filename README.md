@@ -41,5 +41,10 @@ NP.divide(1.21, 1.1);          // = 1.1, not 1.0999999999999999
 NP.round(0.105, 2);            // = 0.11, not 0.1
 ```
 
+PS: if you want to get rid of `XXX is beyond boundary when transfer to integer, the results may not be accurate`, use this at the begining of your app to turn off boundary checking.
+```js
+NP.enableBoundaryChecking(false);
+```
+
 ### License
 MIT
