@@ -107,7 +107,8 @@ function divide(num1, num2) {
     var num2Changed = float2Fixed(num2);
     checkBoundary(num1Changed);
     checkBoundary(num2Changed);
-    return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
+    // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
+    return times((num1Changed / num2Changed), strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
 }
 /**
  * 四舍五入
