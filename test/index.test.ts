@@ -122,6 +122,7 @@ test('NP.divide can do divide operation', (t) => {
   t.true(NP.divide(12, 3, 2) === 2);
   t.true(NP.divide(33.3333, 100) === 0.333333);
   t.true(NP.divide(83.42894732749, 100) === 0.8342894732749);
+  t.true(NP.divide(1, 3) === 0.3333333333333333);
 });
 
 test('NP.round can do round operation', (t) => {
