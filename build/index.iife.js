@@ -1,6 +1,65 @@
 var NP = (function (exports) {
 'use strict';
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
 /**
  * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
@@ -46,64 +105,72 @@ function checkBoundary(num) {
     }
 }
 /**
- * 精确乘法
- */
-function times(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    var baseNum = digitLength(num1) + digitLength(num2);
-    var leftValue = num1Changed * num2Changed;
-    checkBoundary(leftValue);
-    return leftValue / Math.pow(10, baseNum);
-}
-/**
  * 精确加法
  */
-function plus(nums) {
-    resolveNums(nums);
-    return nums.reduce(function (sum, cur) {
-        var baseNum = Math.pow(10, Math.max(digitLength(sum), digitLength(cur)));
-        return (times(sum, baseNum) + times(cur, baseNum)) / baseNum;
-    }, 0);
+function plus() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    var _a = __read(__spread(args)), first = _a[0], nums = _a.slice(1);
+    resolveNums(nums, 0);
+    return nums.reduce(function (ret, cur) {
+        var baseNum = Math.pow(10, Math.max(digitLength(ret), digitLength(cur)));
+        return (times(ret, baseNum) + times(cur, baseNum)) / baseNum;
+    }, first);
 }
 /**
  * 精确减法
  */
-function minus(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function minus() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return minus.apply(void 0, [minus(num1, num2), others[0]].concat(others.slice(1)));
+    var _a = __read(__spread(args)), first = _a[0], nums = _a.slice(1);
+    resolveNums(nums, 0);
+    return nums.reduce(function (ret, cur) {
+        var baseNum = Math.pow(10, Math.max(digitLength(ret), digitLength(cur)));
+        return (times(ret, baseNum) - times(cur, baseNum)) / baseNum;
+    }, first);
+}
+/**
+ * 精确乘法
+ */
+function times() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-    var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-    return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
+    var _a = __read(__spread(args)), first = _a[0], nums = _a.slice(1);
+    resolveNums(nums, 1);
+    return nums.reduce(function (ret, cur) {
+        var num1Changed = float2Fixed(ret);
+        var num2Changed = float2Fixed(cur);
+        var baseNum = digitLength(ret) + digitLength(cur);
+        var leftValue = num1Changed * num2Changed;
+        checkBoundary(leftValue);
+        return leftValue / Math.pow(10, baseNum);
+    }, first);
 }
 /**
  * 精确除法
  */
-function divide(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function divide() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return divide.apply(void 0, [divide(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    checkBoundary(num1Changed);
-    checkBoundary(num2Changed);
-    // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
-    return times((num1Changed / num2Changed), strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
+    var _a = __read(__spread(args)), first = _a[0], nums = _a.slice(1);
+    resolveNums(nums, 1);
+    return nums.reduce(function (ret, cur) {
+        var num1Changed = float2Fixed(ret);
+        var num2Changed = float2Fixed(cur);
+        checkBoundary(num1Changed);
+        checkBoundary(num2Changed);
+        // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
+        return times((num1Changed / num2Changed), strip(Math.pow(10, digitLength(cur) - digitLength(ret))));
+    }, first);
 }
 /**
  * 四舍五入
@@ -125,16 +192,17 @@ function isUndef(v) {
     return v === undefined || v === null;
 }
 /**
- * 将数组中`undefined`和`null`类型转换为`0`并`warn`
+ * 将数组中`undefined`和`null`类型转换为`0/1`并`warn`
  */
-function resolveNums(nums) {
+function resolveNums(nums, ret) {
+    if (ret === void 0) { ret = 0; }
     if (!Array.isArray(nums)) {
         nums = [nums];
     }
     for (var index = 0; index < nums.length; index++) {
         if (isUndef(nums[index])) {
             console.warn(index + " of " + nums + " is not a number");
-            nums[index] = 0;
+            nums[index] = ret;
         }
     }
 }
