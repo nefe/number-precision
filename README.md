@@ -39,6 +39,13 @@ NP.times(3, 0.3);              // = 0.9, not 0.8999999999999999
 NP.times(0.362, 100);          // = 36.2, not 36.199999999999996
 NP.divide(1.21, 1.1);          // = 1.1, not 1.0999999999999999
 NP.round(0.105, 2);            // = 0.11, not 0.1
+
+// undefined
+NP.plus(0.1, 0.2, undefined);  // = 0.3
+NP.plus(0.1, 0.2, null);       // = 0.3
+NP.minus(1.0, 0.9, undefined); // = 0.1
+NP.times(3, 0.3, undefined);   // = 0.9
+NP.divide(1.21, 1.1, null);    // = 1.1
 ```
 
 PS: If you want to get rid of `XXX is beyond boundary when transfer to integer, the results may not be accurate`, use this at the beginning of your app to turn off boundary checking.

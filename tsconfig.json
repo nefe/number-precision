@@ -4,6 +4,7 @@
     "strict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
     "lib": [
       "dom",
       "es5",

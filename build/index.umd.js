@@ -69,16 +69,12 @@ function times(num1, num2) {
 /**
  * 精确加法
  */
-function plus(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-    return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
+function plus(nums) {
+    resolveNums(nums);
+    return nums.reduce(function (sum, cur) {
+        var baseNum = Math.pow(10, Math.max(digitLength(sum), digitLength(cur)));
+        return (times(sum, baseNum) + times(cur, baseNum)) / baseNum;
+    }, 0);
 }
 /**
  * 精确减法
@@ -127,6 +123,23 @@ var _boundaryCheckingState = true;
 function enableBoundaryChecking(flag) {
     if (flag === void 0) { flag = true; }
     _boundaryCheckingState = flag;
+}
+function isUndef(v) {
+    return v === undefined || v === null;
+}
+/**
+ * 将数组中`undefined`和`null`类型转换为`0`并`warn`
+ */
+function resolveNums(nums) {
+    if (!Array.isArray(nums)) {
+        nums = [nums];
+    }
+    for (var index = 0; index < nums.length; index++) {
+        if (isUndef(nums[index])) {
+            console.warn(index + " of " + nums + " is not a number");
+            nums[index] = 0;
+        }
+    }
 }
 var index = { strip: strip, plus: plus, minus: minus, times: times, divide: divide, round: round, digitLength: digitLength, float2Fixed: float2Fixed, enableBoundaryChecking: enableBoundaryChecking };
 

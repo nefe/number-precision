@@ -47,57 +47,59 @@ function checkBoundary(num: number) {
 }
 
 /**
- * 精确乘法
- */
-function times(num1: number, num2: number, ...others: number[]): number {
-  if (others.length > 0) {
-    return times(times(num1, num2), others[0], ...others.slice(1));
-  }
-  const num1Changed = float2Fixed(num1);
-  const num2Changed = float2Fixed(num2);
-  const baseNum = digitLength(num1) + digitLength(num2);
-  const leftValue = num1Changed * num2Changed;
-
-  checkBoundary(leftValue);
-
-  return leftValue / Math.pow(10, baseNum);
-}
-
-/**
  * 精确加法
  */
-function plus(num1: number, num2: number, ...others: number[]): number {
-  if (others.length > 0) {
-    return plus(plus(num1, num2), others[0], ...others.slice(1));
-  }
-  const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-  return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
+function plus(...args: any[]) {
+  const [first, ...nums] = [...args];
+  resolveNums(nums, 0);
+  return nums.reduce((ret, cur) => {
+    const baseNum = Math.pow(10, Math.max(digitLength(ret), digitLength(cur)));
+    return (times(ret, baseNum) + times(cur, baseNum)) / baseNum;
+  }, first);
 }
 
 /**
  * 精确减法
  */
-function minus(num1: number, num2: number, ...others: number[]): number {
-  if (others.length > 0) {
-    return minus(minus(num1, num2), others[0], ...others.slice(1));
-  }
-  const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
-  return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
+function minus(...args: any[]) {
+  const [first, ...nums] = [...args];
+  resolveNums(nums, 0);
+  return nums.reduce((ret, cur) => {
+    const baseNum = Math.pow(10, Math.max(digitLength(ret), digitLength(cur)));
+    return (times(ret, baseNum) - times(cur, baseNum)) / baseNum;
+  }, first);
+}
+
+/**
+ * 精确乘法
+ */
+function times(...args: any[]) {
+  const [first, ...nums] = [...args];
+  resolveNums(nums, 1);
+  return nums.reduce((ret, cur) => {
+    const num1Changed = float2Fixed(ret);
+    const num2Changed = float2Fixed(cur);
+    const baseNum = digitLength(ret) + digitLength(cur);
+    const leftValue = num1Changed * num2Changed;
+    checkBoundary(leftValue);
+    return leftValue / Math.pow(10, baseNum);
+  }, first);
 }
 
 /**
  * 精确除法
  */
-function divide(num1: number, num2: number, ...others: number[]): number {
-  if (others.length > 0) {
-    return divide(divide(num1, num2), others[0], ...others.slice(1));
-  }
-  const num1Changed = float2Fixed(num1);
-  const num2Changed = float2Fixed(num2);
-  checkBoundary(num1Changed);
-  checkBoundary(num2Changed);
-  // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
-  return times((num1Changed / num2Changed), strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
+function divide(...args: any[]) {
+  const [first, ...nums] = [...args];
+  resolveNums(nums, 1);
+  return nums.reduce((ret, cur) => {
+    const num1Changed = float2Fixed(ret);
+    const num2Changed = float2Fixed(cur);
+    checkBoundary(num1Changed);
+    checkBoundary(num2Changed);
+    // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
+    return times((num1Changed / num2Changed), strip(Math.pow(10, digitLength(cur) - digitLength(ret))));
+  }, first);
 }
 
 /**
@@ -116,5 +118,25 @@ let _boundaryCheckingState = true;
 function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
+
+function isUndef(v: any): boolean {
+  return v === undefined || v === null;
+}
+
+/**
+ * 将数组中`undefined`和`null`类型转换为`0/1`并`warn`
+ */
+function resolveNums(nums: number | number[], ret: number = 0) {
+  if (!Array.isArray(nums)) {
+    nums = [nums];
+  }
+  for (let index = 0; index < nums.length; index++) {
+    if (isUndef(nums[index])) {
+      console.warn(`${index} of ${nums} is not a number`);
+      nums[index] = ret;
+    }
+  }
+}
+
 export { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
 export default { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
