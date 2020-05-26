@@ -3,6 +3,7 @@
   "version": "1.3.2",
   "description": "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
+  "module": "build/index.es.js",
   "types": "src/index.ts",
   "author": "cam song",
   "keywords": [
