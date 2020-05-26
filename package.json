@@ -36,10 +36,10 @@
     "tslint"
   ],
   "devDependencies": {
-    "ava": "^0.24.0",
-    "codecov": "^3.1.0",
-    "nyc": "^11.3.0",
+    "ava": "^3.8.2",
     "braces": ">=2.3.1",
+    "codecov": "^3.1.0",
+    "nyc": "^15.0.1",
     "pre-commit": "^1.2.2",
     "rollup": "^0.52.2",
     "rollup-plugin-typescript": "^0.8.1",
