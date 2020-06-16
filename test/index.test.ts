@@ -12,7 +12,7 @@ test('NP.digitLength can do digitLength operation', (t) => {
   t.true(NP.digitLength(123.4567890123) === 10);
 
   t.true(NP.digitLength(1.23e-5) === 7);
-  t.true(NP.digitLength(1.23e-5) === 7);
+  t.true(NP.digitLength(1.23E-5) === 7);
   t.true(NP.digitLength(1.233467e-5) === 11);
   t.true(NP.digitLength(123.45e-5) === 7);
   t.true(NP.digitLength(1.23e-10) === 12);
@@ -91,7 +91,7 @@ test('NP.minus can do minus operation', (t) => {
   t.true(NP.minus(-1, 0) === -1);
   t.true(NP.minus(-1, -0) === -1);
   t.true(NP.minus(1, 22) === -21);
-  t.true(NP.minus(8893568.397103781249, -7.2967405955) === 8893575.693844376749);
+  t.true(NP.minus(8893568.397103781249, -7.29674059550) === 8893575.693844376749);
   t.true(NP.minus(105468873, 0) === 105468873);
   t.true(NP.minus('0.07', '0.01') === 0.06);
   t.true(NP.minus('0.7', '0.1') === 0.6);
