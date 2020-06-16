@@ -8,7 +8,7 @@ type numType = number | string;
  * 把错误的数据转正
  * strip(0.09999999999999998)=0.1
  */
-function strip(num: numType, precision = 12): number {
+function strip(num: numType, precision = 15): number {
   return +parseFloat(Number(num).toPrecision(precision));
 }
 
@@ -32,7 +32,7 @@ function float2Fixed(num: numType): number {
     return Number(num.toString().replace('.', ''));
   }
   const dLen = digitLength(num);
-  return dLen > 0 ? strip(times(num, Math.pow(10, dLen))) : Number(num);
+  return dLen > 0 ? strip(Number(num) * Math.pow(10, dLen)) : Number(num);
 }
 
 /**

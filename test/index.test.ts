@@ -10,7 +10,6 @@ test('NP.strip can eliminate rounding errors', (t) => {
 
 test('NP.digitLength can do digitLength operation', (t) => {
   t.true(NP.digitLength(123.4567890123) === 10);
-  t.true(NP.digitLength('123.4567890123') === 10);
 
   t.true(NP.digitLength(1.23e-5) === 7);
   t.true(NP.digitLength(1.23e-5) === 7);

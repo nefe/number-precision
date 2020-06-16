@@ -23,7 +23,6 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
     "test": "tsc -p tsconfig.test.json && nyc --reporter=lcov --reporter=text --reporter=json ava && rm -rf .nyc_output",
-    "test1": "ava",
     "posttest": "codecov -f coverage/*.json -t 072762c4-c5bc-4393-bcd9-71eac9e7725b",
     "prepublish": "rm -rf build && tsc && npm run build",
     "tslint": "tslint './src/**/*.?(ts|tsx)'"
@@ -47,7 +46,7 @@
     "rollup-plugin-typescript2": "^0.8.4",
     "rollup-watch": "^4.3.1",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.2"
+    "typescript": "^3.8.3"
   },
   "license": "MIT"
 }
