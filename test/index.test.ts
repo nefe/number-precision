@@ -248,4 +248,17 @@ test('NP.round can do round operation', (t) => {
   t.true(NP.round('1.2345e3', 3) === 1234.5);
   t.true(NP.round('1.2344e3', 3) === 1234.4);
   t.true(NP.round('1e3', 1) === 1000);
+
+  t.true(NP.round('-0.125', 2) === -0.13);
+  t.true(NP.round('-0.001', 2) === 0.00);
+  t.true(NP.round('-0.005', 2) === -0.01);
+  t.true(NP.round('0.125', 2) === 0.13);
+  t.true(NP.round('0.001', 2) === 0.00);
+  t.true(NP.round('0.005', 2) === 0.01);
+  t.true(NP.round(-0.125, 2) === -0.13);
+  t.true(NP.round(-0.001, 2) === 0.00);
+  t.true(NP.round(-0.005, 2) === -0.01);
+  t.true(NP.round(0.125, 2) === 0.13);
+  t.true(NP.round(0.001, 2) === 0.00);
+  t.true(NP.round(0.005, 2) === 0.01);
 });
