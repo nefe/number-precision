@@ -48,12 +48,28 @@ function checkBoundary(num: number) {
 }
 
 /**
+ * 迭代操作
+ */
+function iteratorOperation(arr: numType[], operation: (...args: numType[]) => number): number {
+  const [num1, num2, ...others] = arr;
+  let res = operation(num1, num2);
+
+  others.forEach((num) => {
+    res = operation(res, num);
+  });
+
+  return res;
+}
+
+/**
  * 精确乘法
  */
-function times(num1: numType, num2: numType, ...others: numType[]): number {
-  if (others.length > 0) {
-    return times(times(num1, num2), others[0], ...others.slice(1));
+function times(...nums: numType[]): number {
+  if (nums.length > 2) {
+    return iteratorOperation(nums, times);
   }
+
+  const [num1, num2] = nums;
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
@@ -67,10 +83,12 @@ function times(num1: numType, num2: numType, ...others: numType[]): number {
 /**
  * 精确加法
  */
-function plus(num1: numType, num2: numType, ...others: numType[]): number {
-  if (others.length > 0) {
-    return plus(plus(num1, num2), others[0], ...others.slice(1));
+function plus(...nums: numType[]): number {
+  if (nums.length > 2) {
+    return iteratorOperation(nums, plus);
   }
+
+  const [num1, num2] = nums;
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
@@ -78,10 +96,12 @@ function plus(num1: numType, num2: numType, ...others: numType[]): number {
 /**
  * 精确减法
  */
-function minus(num1: numType, num2: numType, ...others: numType[]): number {
-  if (others.length > 0) {
-    return minus(minus(num1, num2), others[0], ...others.slice(1));
+function minus(...nums: numType[]): number {
+  if (nums.length > 2) {
+    return iteratorOperation(nums, minus);
   }
+
+  const [num1, num2] = nums;
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
 }
@@ -89,10 +109,12 @@ function minus(num1: numType, num2: numType, ...others: numType[]): number {
 /**
  * 精确除法
  */
-function divide(num1: numType, num2: numType, ...others: numType[]): number {
-  if (others.length > 0) {
-    return divide(divide(num1, num2), others[0], ...others.slice(1));
+function divide(...nums: numType[]): number {
+  if (nums.length > 2) {
+    return iteratorOperation(nums, divide);
   }
+
+  const [num1, num2] = nums;
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   checkBoundary(num1Changed);
