@@ -106,7 +106,11 @@ function divide(num1: numType, num2: numType, ...others: numType[]): number {
  */
 function round(num: numType, ratio: number): number {
   const base = Math.pow(10, ratio);
-  return divide(Math.round(times(num, base)), base);
+  let result = divide(Math.round(Math.abs(times(num, base))), base);
+  if (num < 0 && result !== 0) {
+    result = times(result, -1);
+  }
+  return result;
 }
 
 let _boundaryCheckingState = true;
