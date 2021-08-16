@@ -4,56 +4,6 @@
 	(factory((global.NP = {})));
 }(this, (function (exports) { 'use strict';
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function __spreadArrays() {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-}
-
 /**
  * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
@@ -99,16 +49,28 @@ function checkBoundary(num) {
     }
 }
 /**
+ * 迭代操作
+ */
+function iteratorOperation(arr, operation) {
+    var num1 = arr[0], num2 = arr[1], others = arr.slice(2);
+    var res = operation(num1, num2);
+    others.forEach(function (num) {
+        res = operation(res, num);
+    });
+    return res;
+}
+/**
  * 精确乘法
  */
-function times(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function times() {
+    var nums = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        nums[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return times.apply(void 0, __spreadArrays([times(num1, num2), others[0]], others.slice(1)));
+    if (nums.length > 2) {
+        return iteratorOperation(nums, times);
     }
+    var num1 = nums[0], num2 = nums[1];
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
     var baseNum = digitLength(num1) + digitLength(num2);
@@ -119,42 +81,45 @@ function times(num1, num2) {
 /**
  * 精确加法
  */
-function plus(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function plus() {
+    var nums = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        nums[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return plus.apply(void 0, __spreadArrays([plus(num1, num2), others[0]], others.slice(1)));
+    if (nums.length > 2) {
+        return iteratorOperation(nums, plus);
     }
+    var num1 = nums[0], num2 = nums[1];
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
 /**
  * 精确减法
  */
-function minus(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function minus() {
+    var nums = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        nums[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return minus.apply(void 0, __spreadArrays([minus(num1, num2), others[0]], others.slice(1)));
+    if (nums.length > 2) {
+        return iteratorOperation(nums, minus);
     }
+    var num1 = nums[0], num2 = nums[1];
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
 }
 /**
  * 精确除法
  */
-function divide(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
+function divide() {
+    var nums = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        nums[_i] = arguments[_i];
     }
-    if (others.length > 0) {
-        return divide.apply(void 0, __spreadArrays([divide(num1, num2), others[0]], others.slice(1)));
+    if (nums.length > 2) {
+        return iteratorOperation(nums, divide);
     }
+    var num1 = nums[0], num2 = nums[1];
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
     checkBoundary(num1Changed);
