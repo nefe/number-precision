@@ -89,7 +89,9 @@ function plus(...nums: numType[]): number {
   }
 
   const [num1, num2] = nums;
+  // 取最大的小数位
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
+  // 把小数都转为整数然后再计算
   return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
 

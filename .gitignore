@@ -7,3 +7,4 @@ logs
 build-test
 .rpt2_cache
 build/
+.nyc_output/

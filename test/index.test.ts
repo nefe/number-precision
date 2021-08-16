@@ -74,6 +74,7 @@ test('NP.plus can do plus operation', (t) => {
   t.true(NP.plus('-3', '7') === 4);
   t.true(NP.plus('-221', '38') === -183);
   t.true(NP.plus('-1', '0') === -1);
+  t.true(NP.plus('-1', '0', '2', '3', 4) === 8);
   t.true(NP.plus('2.018', '0.001') === 2.019);
   t.true(NP.plus('1.3224e10', '1.3224e3') === 13224001322.4);
   t.true(NP.plus('1.6e-30', '1.6e-30') === 3.2e-30);
@@ -222,6 +223,7 @@ test('NP.divide can do divide operation', (t) => {
   t.true(NP.divide('1', '3') === 0.3333333333333333);
 
   t.true(NP.divide(...new Array(500).fill(1)) === 1);
+  t.true(NP.divide(1024, 4, 8, 2) === 16);
 });
 
 test('NP.round can do round operation', (t) => {
