@@ -22,5 +22,5 @@ export default {
       dest: './build/index.es.js'
     }
   ],
-  plugins: [typescript()]
+  plugins: [typescript({cacheRoot: `${require('temp-dir')}/.rpt2_cache`})]
 }
