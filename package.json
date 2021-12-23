@@ -4,7 +4,7 @@
   "description": "Perform addition, subtraction, multiplication and division operations precisely using javascript",
   "main": "build/index.js",
   "module": "build/index.es.js",
-  "types": "src/index.ts",
+  "types": "build/index.d.ts",
   "author": "cam song",
   "keywords": [
     "number precision",
@@ -24,7 +24,7 @@
     "watch": "rollup -cw",
     "test": "tsc -p tsconfig.test.json && nyc --reporter=lcov --reporter=text --reporter=json ava && rm -rf .nyc_output",
     "posttest": "codecov -f coverage/*.json -t 072762c4-c5bc-4393-bcd9-71eac9e7725b",
-    "prepublish": "rm -rf build && npm run build",
+    "prepublish": "rm -rf build && tsc && npm run build",
     "tslint": "tslint './src/**/*.?(ts|tsx)'"
   },
   "ava": {
