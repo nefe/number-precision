@@ -11,7 +11,8 @@
     ],
     "target": "es5",
     "outDir": "build",
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true
   },
   "include": [
     "src/*.ts"
