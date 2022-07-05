@@ -65,10 +65,10 @@ function checkBoundary(num: number) {
 function createOperation(operation: (n1: NumberType, n2: NumberType) => number): (...nums: NumberType[]) => number {
   return (...nums: NumberType[]) => {
     let result = nums[0] as number;
-    const loop = nums.slice(1);
+    const others = nums.slice(1);
 
-    while (loop.length) {
-      result = operation(result, loop.shift()!);
+    for (let i = 0, len = others.length; i < len; ++i) {
+      result = operation(result, others[i]);
     }
 
     return result;
