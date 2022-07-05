@@ -103,7 +103,7 @@ const plus = createOperation((num1, num2) => {
 });
 
 /**
- * Accurate subtraction
+ * Accurate subtraction.
  *
  * @param nums The numbers to subtract
  */
