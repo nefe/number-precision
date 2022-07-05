@@ -1,22 +1,29 @@
-type numType = number | string;
 /**
  * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
+ *
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
  */
 
+type NumberType = number | string;
+
 /**
- * 把错误的数据转正
- * strip(0.09999999999999998)=0.1
+ * Correct the given number to specifying significant digits.
+ *
+ * @param num The input number
+ * @param precision An integer specifying the number of significant digits
+ *
+ * @example strip(0.09999999999999998) === 0.1 // true
  */
-function strip(num: numType, precision = 15): number {
+function strip(num: NumberType, precision = 15): number {
   return +parseFloat(Number(num).toPrecision(precision));
 }
 
 /**
- * Return digits length of a number
- * @param {*number} num Input number
+ * Return digits length of a number.
+ *
+ * @param num The input number
  */
-function digitLength(num: numType): number {
+function digitLength(num: NumberType): number {
   // Get digit length of e
   const eSplit = num.toString().split(/[eE]/);
   const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0);
@@ -24,10 +31,12 @@ function digitLength(num: numType): number {
 }
 
 /**
- * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
- * @param {*number} num 输入数
+ * Convert the given number to integer, support scientific notation.
+ * The number will be scale up if it is decimal.
+ *
+ * @param num The input number
  */
-function float2Fixed(num: numType): number {
+function float2Fixed(num: NumberType): number {
   if (num.toString().indexOf('e') === -1) {
     return Number(num.toString().replace('.', ''));
   }
@@ -36,8 +45,9 @@ function float2Fixed(num: numType): number {
 }
 
 /**
- * 检测数字是否越界，如果越界给出提示
- * @param {*number} num 输入数
+ * Log a warning if the given number is out of bounds.
+ *
+ * @param num The input number
  */
 function checkBoundary(num: number) {
   if (_boundaryCheckingState) {
@@ -48,10 +58,12 @@ function checkBoundary(num: number) {
 }
 
 /**
- * 创建操作
+ * Create an operation to support rest params.
+ *
+ * @param operation The original operation
  */
-function createOperation(operation: (n1: numType, n2: numType) => number): (...nums: numType[]) => number {
-  return (...nums: numType[]) => {
+function createOperation(operation: (n1: NumberType, n2: NumberType) => number): (...nums: NumberType[]) => number {
+  return (...nums: NumberType[]) => {
     let result = nums[0] as number;
     const loop = nums.slice(1);
 
@@ -64,7 +76,9 @@ function createOperation(operation: (n1: numType, n2: numType) => number): (...n
 }
 
 /**
- * 精确乘法
+ * Accurate multiplication.
+ *
+ * @param nums The numbers to multiply
  */
 const times = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
@@ -78,7 +92,9 @@ const times = createOperation((num1, num2) => {
 });
 
 /**
- * 精确加法
+ * Accurate addition.
+ *
+ * @param nums The numbers to add
  */
 const plus = createOperation((num1, num2) => {
   // 取最大的小数位
@@ -88,7 +104,9 @@ const plus = createOperation((num1, num2) => {
 });
 
 /**
- * 精确减法
+ * Accurate subtraction
+ *
+ * @param nums The numbers to subtract
  */
 const minus = createOperation((num1, num2) => {
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
@@ -96,34 +114,44 @@ const minus = createOperation((num1, num2) => {
 });
 
 /**
- * 精确除法
+ * Accurate division.
+ *
+ * @param nums The numbers to divide
  */
 const divide = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
+
   checkBoundary(num1Changed);
   checkBoundary(num2Changed);
+
   // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
   return times(num1Changed / num2Changed, strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
 });
 
 /**
- * 四舍五入
+ * Accurate rounding method.
+ *
+ * @param num The number to round
+ * @param decimal An integer specifying the decimal digits
  */
-function round(num: numType, ratio: number): number {
-  const base = Math.pow(10, ratio);
+function round(num: NumberType, decimal: number): number {
+  const base = Math.pow(10, decimal);
   let result = divide(Math.round(Math.abs(times(num, base))), base);
+
   if (num < 0 && result !== 0) {
     result = times(result, -1);
   }
+
   return result;
 }
 
 let _boundaryCheckingState = true;
 
 /**
- * 是否进行边界检查，默认开启
- * @param flag 标记开关，true 为开启，false 为关闭，默认为 true
+ * Whether to check the bounds of number, default is enabled.
+ *
+ * @param flag The value to indicate whether is enabled
  */
 function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
