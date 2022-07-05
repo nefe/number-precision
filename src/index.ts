@@ -48,28 +48,25 @@ function checkBoundary(num: number) {
 }
 
 /**
- * 迭代操作
+ * 创建操作
  */
-function iteratorOperation(arr: numType[], operation: (...args: numType[]) => number): number {
-  const [num1, num2, ...others] = arr;
-  let res = operation(num1, num2);
+function createOperation(operation: (n1: numType, n2: numType) => number): (...nums: numType[]) => number {
+  return (...nums: numType[]) => {
+    let result = nums[0] as number;
+    const loop = nums.slice(1);
 
-  others.forEach((num) => {
-    res = operation(res, num);
-  });
+    while (loop.length) {
+      result = operation(result, loop.shift()!);
+    }
 
-  return res;
+    return result;
+  };
 }
 
 /**
  * 精确乘法
  */
-function times(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, times);
-  }
-
-  const [num1, num2] = nums;
+const times = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
@@ -78,52 +75,37 @@ function times(...nums: numType[]): number {
   checkBoundary(leftValue);
 
   return leftValue / Math.pow(10, baseNum);
-}
+});
 
 /**
  * 精确加法
  */
-function plus(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, plus);
-  }
-
-  const [num1, num2] = nums;
+const plus = createOperation((num1, num2) => {
   // 取最大的小数位
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   // 把小数都转为整数然后再计算
   return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
-}
+});
 
 /**
  * 精确减法
  */
-function minus(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, minus);
-  }
-
-  const [num1, num2] = nums;
+const minus = createOperation((num1, num2) => {
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
-}
+});
 
 /**
  * 精确除法
  */
-function divide(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, divide);
-  }
-
-  const [num1, num2] = nums;
+const divide = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   checkBoundary(num1Changed);
   checkBoundary(num2Changed);
   // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
   return times(num1Changed / num2Changed, strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
-}
+});
 
 /**
  * 四舍五入
@@ -138,6 +120,7 @@ function round(num: numType, ratio: number): number {
 }
 
 let _boundaryCheckingState = true;
+
 /**
  * 是否进行边界检查，默认开启
  * @param flag 标记开关，true 为开启，false 为关闭，默认为 true
@@ -145,7 +128,9 @@ let _boundaryCheckingState = true;
 function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
+
 export { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
+
 export default {
   strip,
   plus,
