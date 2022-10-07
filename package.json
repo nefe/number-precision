@@ -25,7 +25,7 @@
     "test": "tsc -p tsconfig.test.json && nyc --reporter=lcov --reporter=text --reporter=json ava && rm -rf .nyc_output",
     "posttest": "codecov -f coverage/*.json -t 072762c4-c5bc-4393-bcd9-71eac9e7725b",
     "prepublish": "rm -rf build && tsc && npm run build",
-    "tslint": "tslint './src/**/*.?(ts|tsx)'"
+    "tslint": "tslint ./src/**/*.ts --fix"
   },
   "ava": {
     "files": [

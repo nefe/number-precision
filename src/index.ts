@@ -1,22 +1,29 @@
-type numType = number | string;
 /**
  * @desc 解决浮动运算问题，避免小数点后产生多位数和计算精度损失。
+ *
  * 问题示例：2.3 + 2.4 = 4.699999999999999，1.0 - 0.9 = 0.09999999999999998
  */
 
+type NumberType = number | string;
+
 /**
- * 把错误的数据转正
- * strip(0.09999999999999998)=0.1
+ * Correct the given number to specifying significant digits.
+ *
+ * @param num The input number
+ * @param precision An integer specifying the number of significant digits
+ *
+ * @example strip(0.09999999999999998) === 0.1 // true
  */
-function strip(num: numType, precision = 15): number {
+function strip(num: NumberType, precision = 15): number {
   return +parseFloat(Number(num).toPrecision(precision));
 }
 
 /**
- * Return digits length of a number
- * @param {*number} num Input number
+ * Return digits length of a number.
+ *
+ * @param num The input number
  */
-function digitLength(num: numType): number {
+function digitLength(num: NumberType): number {
   // Get digit length of e
   const eSplit = num.toString().split(/[eE]/);
   const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0);
@@ -24,10 +31,12 @@ function digitLength(num: numType): number {
 }
 
 /**
- * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
- * @param {*number} num 输入数
+ * Convert the given number to integer, support scientific notation.
+ * The number will be scale up if it is decimal.
+ *
+ * @param num The input number
  */
-function float2Fixed(num: numType): number {
+function float2Fixed(num: NumberType): number {
   if (num.toString().indexOf('e') === -1) {
     return Number(num.toString().replace('.', ''));
   }
@@ -36,8 +45,9 @@ function float2Fixed(num: numType): number {
 }
 
 /**
- * 检测数字是否越界，如果越界给出提示
- * @param {*number} num 输入数
+ * Log a warning if the given number is out of bounds.
+ *
+ * @param num The input number
  */
 function checkBoundary(num: number) {
   if (_boundaryCheckingState) {
@@ -48,28 +58,23 @@ function checkBoundary(num: number) {
 }
 
 /**
- * 迭代操作
+ * Create an operation to support rest params.
+ *
+ * @param operation The original operation
  */
-function iteratorOperation(arr: numType[], operation: (...args: numType[]) => number): number {
-  const [num1, num2, ...others] = arr;
-  let res = operation(num1, num2);
-
-  others.forEach((num) => {
-    res = operation(res, num);
-  });
-
-  return res;
+function createOperation(operation: (n1: NumberType, n2: NumberType) => number): (...nums: NumberType[]) => number {
+  return (...nums: NumberType[]) => {
+    const [first, ...others] = nums;
+    return others.reduce((prev, next) => operation(prev, next), first) as number;
+  };
 }
 
 /**
- * 精确乘法
+ * Accurate multiplication.
+ *
+ * @param nums The numbers to multiply
  */
-function times(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, times);
-  }
-
-  const [num1, num2] = nums;
+const times = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
   const baseNum = digitLength(num1) + digitLength(num2);
@@ -78,74 +83,76 @@ function times(...nums: numType[]): number {
   checkBoundary(leftValue);
 
   return leftValue / Math.pow(10, baseNum);
-}
+});
 
 /**
- * 精确加法
+ * Accurate addition.
+ *
+ * @param nums The numbers to add
  */
-function plus(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, plus);
-  }
-
-  const [num1, num2] = nums;
+const plus = createOperation((num1, num2) => {
   // 取最大的小数位
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   // 把小数都转为整数然后再计算
   return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
-}
+});
 
 /**
- * 精确减法
+ * Accurate subtraction.
+ *
+ * @param nums The numbers to subtract
  */
-function minus(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, minus);
-  }
-
-  const [num1, num2] = nums;
+const minus = createOperation((num1, num2) => {
   const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
   return (times(num1, baseNum) - times(num2, baseNum)) / baseNum;
-}
+});
 
 /**
- * 精确除法
+ * Accurate division.
+ *
+ * @param nums The numbers to divide
  */
-function divide(...nums: numType[]): number {
-  if (nums.length > 2) {
-    return iteratorOperation(nums, divide);
-  }
-
-  const [num1, num2] = nums;
+const divide = createOperation((num1, num2) => {
   const num1Changed = float2Fixed(num1);
   const num2Changed = float2Fixed(num2);
+
   checkBoundary(num1Changed);
   checkBoundary(num2Changed);
+
   // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
   return times(num1Changed / num2Changed, strip(Math.pow(10, digitLength(num2) - digitLength(num1))));
-}
+});
 
 /**
- * 四舍五入
+ * Accurate rounding method.
+ *
+ * @param num The number to round
+ * @param decimal An integer specifying the decimal digits
  */
-function round(num: numType, ratio: number): number {
-  const base = Math.pow(10, ratio);
+function round(num: NumberType, decimal: number): number {
+  const base = Math.pow(10, decimal);
   let result = divide(Math.round(Math.abs(times(num, base))), base);
+
   if (num < 0 && result !== 0) {
     result = times(result, -1);
   }
+
   return result;
 }
 
 let _boundaryCheckingState = true;
+
 /**
- * 是否进行边界检查，默认开启
- * @param flag 标记开关，true 为开启，false 为关闭，默认为 true
+ * Whether to check the bounds of number, default is enabled.
+ *
+ * @param flag The value to indicate whether is enabled
  */
 function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
+
 export { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
+
 export default {
   strip,
   plus,
