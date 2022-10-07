@@ -64,13 +64,8 @@ function checkBoundary(num: number) {
  */
 function createOperation(operation: (n1: NumberType, n2: NumberType) => number): (...nums: NumberType[]) => number {
   return (...nums: NumberType[]) => {
-    let result = nums[0] as number;
-
-    for (let i = 1, len = nums.length; i < len; ++i) {
-      result = operation(result, nums[i]);
-    }
-
-    return result;
+    const [first, ...others] = nums;
+    return others.reduce((prev, next) => operation(prev, next), first) as number;
   };
 }
 
